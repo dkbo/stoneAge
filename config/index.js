@@ -1,21 +1,11 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 const path = require('path')
-const { login, target } = require('./login')
-
-const api = [
-    '^/api',
-    '^/gameBounscodeType',
-    '^/login',
-    '^/css',
-    '^/js',
-    '^/favicon.ico'
-].join('|')
 
 module.exports = {
     build: {
         env: require('./prod.env'),
-        index: path.resolve(__dirname, '../public/index.html'),
-        assetsRoot: path.resolve(__dirname, '../public'),
+        index: path.resolve(__dirname, '../doc/index.html'),
+        assetsRoot: path.resolve(__dirname, '../doc'),
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         productionSourceMap: true,
@@ -34,18 +24,9 @@ module.exports = {
     dev: {
         env: require('./dev.env'),
         port: 8074,
-        login,
         autoOpenBrowser: true,
-        assetsSubDirectory: 'static',
+        assetsSubDirectory: 'doc',
         assetsPublicPath: '/',
-        // proxyTable: {
-        //     '*': {
-        //         target,
-        //         changeOrigin: true,
-        //         filter: pathname => pathname.match(api)
-        //         // secure: false
-        //     }
-        // },
         proxyTable: {},
         cssSourceMap: true
     }
