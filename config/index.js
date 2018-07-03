@@ -4,8 +4,8 @@ const path = require('path')
 module.exports = {
     build: {
         env: require('./prod.env'),
-        index: path.resolve(__dirname, '../doc/index.html'),
-        assetsRoot: path.resolve(__dirname, '../doc'),
+        index: path.resolve(__dirname, '../docs/index.html'),
+        assetsRoot: path.resolve(__dirname, '../docs'),
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         productionSourceMap: true,
@@ -25,7 +25,7 @@ module.exports = {
         env: require('./dev.env'),
         port: 8074,
         autoOpenBrowser: true,
-        assetsSubDirectory: 'doc',
+        assetsSubDirectory: 'docs',
         assetsPublicPath: '/',
         proxyTable: {},
         cssSourceMap: true
