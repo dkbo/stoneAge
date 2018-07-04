@@ -1,5 +1,5 @@
 import base64 from 'hi-base64'
-import router from '@/router'
+// import router from '@/router'
 
 axios.defaults.withCredentials = true
 /**
@@ -101,3 +101,47 @@ export const getStorage = (key, isJson = true) => {
  * @param {any} state 要複製的資料
  */
 export const returnState = data => JSON.parse(JSON.stringify(data))
+
+/******************* 計算公式 *******************/
+/**
+ * 初始單項數值 = ((等級 - 1) * 野生寵成長係數 + 初始能力係數) * 初始單項變數 / 100
+ * @param {Number} lv 等級
+ * @param {Number} GC 野生寵成長係數
+ * @param {Number} IA 初始能力係數
+ * @param {Number} ISI 初始單項變數
+ */
+export const ISV = ({ LV, GC, IA, ISI }) => ((LV - 1) * GC + IA) * ISI / 100
+
+/**
+ * 體力單項變數 = 體力成長檔 + a
+ * 腕力單項變數 = 腕力成長檔 + b
+ * 耐力單項變數 = 耐力成長檔 + c
+ * 速度單項變數 = 速度成長檔 + d
+ * @param {Number} GF 成長檔
+ * @param {Number} V 隨機變數
+ */
+export const SV = ({ GF, V }) => GF + V
+
+/**
+ * 血 = 體力 * 4 + 腕力 + 耐力 + 速度
+ * @param {Number} V 隨機變數
+ */
+export const hp = ({ GF, V }) => GF + V
+
+/**
+ * 攻 = 體力 * 0.1 + 腕力 + 耐力 * 0.1 + 速度
+ * @param {Number} V 隨機變數
+ */
+export const atk = ({ GF, V }) => GF + V
+
+/**
+ * 防 = 體力 * 0.1 + 腕力 * 0.1 + 耐力 + 速度
+ * @param {Number} V 隨機變數
+ */
+export const def = ({ GF, V }) => GF + V
+
+/**
+ * 敏 = 速度
+ * @param {Number} v 敏
+ */
+export const agi = (v) => v
