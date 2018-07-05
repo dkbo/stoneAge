@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill'
 import '@UTIL/prototype'
+import {calc} from '@UTIL'
 
 import Vue from 'vue'
 import App from './App'
@@ -35,3 +36,8 @@ const vue$ = new Vue({
     store,
     render: createElement => createElement(App)
 })
+
+const GPF = [24, 38, 16, 20] // 體,腕,耐,速
+const GPFR = [1, 3, 3, 3] // 體,腕,耐,速
+const f = [2, 2, 2, 2] // 體,腕,耐,速
+calc(GPF, GPFR, f)

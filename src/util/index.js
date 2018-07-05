@@ -1,7 +1,6 @@
 import base64 from 'hi-base64'
 // import router from '@/router'
 
-axios.defaults.withCredentials = true
 /**
  * base 64 編碼
  * @param {string} str 要編碼的字串
@@ -110,7 +109,7 @@ export const returnState = data => JSON.parse(JSON.stringify(data))
  * @param {Number} IA 初始能力係數
  * @param {Number} ISI 初始單項變數
  */
-export const ISV = ({ LV, GC, IA, ISI }) => ((LV - 1) * GC + IA) * ISI / 100
+export const getISV = ({ LV, GC, IA, ISI }) => ((LV - 1) * GC + IA) * ISI / 100
 
 /**
  * 體力單項變數 = 體力成長檔 + a
@@ -120,28 +119,45 @@ export const ISV = ({ LV, GC, IA, ISI }) => ((LV - 1) * GC + IA) * ISI / 100
  * @param {Number} GF 成長檔
  * @param {Number} V 隨機變數
  */
-export const SV = ({ GF, V }) => GF + V
+export const getSV = ({ GF, V }) => GF + V
 
 /**
  * 血 = 體力 * 4 + 腕力 + 耐力 + 速度
  * @param {Number} V 隨機變數
  */
-export const hp = ({ GF, V }) => GF + V
+export const getHp = ({ GF, V }) => GF + V
 
 /**
  * 攻 = 體力 * 0.1 + 腕力 + 耐力 * 0.1 + 速度
  * @param {Number} V 隨機變數
  */
-export const atk = ({ GF, V }) => GF + V
+export const getAtk = ({ GF, V }) => GF + V
 
 /**
  * 防 = 體力 * 0.1 + 腕力 * 0.1 + 耐力 + 速度
  * @param {Number} V 隨機變數
  */
-export const def = ({ GF, V }) => GF + V
+export const getDef = ({ GF, V }) => GF + V
 
 /**
  * 敏 = 速度
  * @param {Number} v 敏
  */
-export const agi = (v) => v
+export const getAgi = (v) => v
+
+export const calc = (GPF, GPFR, f) => {
+    const base = GPF.map((v, i) => v + GPFR[i] + f[i])
+    const fourWei = base.map(ISI => getISV({ LV: 1, GC: 4, IA: 26, ISI }))
+    const hp = getAgi(fourWei[1])
+    const hp = getAgi(fourWei[2])
+    const hp = getAgi(fourWei[3])
+    const agi = getAgi(fourWei[4])
+    console.log(fourWei)
+}
+// ;[...Array(4).keys()].forEach((i) => {
+//     ;[...Array(5).keys()]
+//     .map(i => i - 2)
+//     .forEach((i) => {
+
+//     })
+// })
