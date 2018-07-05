@@ -125,34 +125,48 @@ export const getSV = ({ GF, V }) => GF + V
  * 血 = 體力 * 4 + 腕力 + 耐力 + 速度
  * @param {Number} V 隨機變數
  */
-export const getHp = ({ GF, V }) => GF + V
+export const getHp = ([hp, atk, def, agi]) => 4 * hp + atk + def + agi
 
 /**
- * 攻 = 體力 * 0.1 + 腕力 + 耐力 * 0.1 + 速度
+ * 攻 = 體力 * 0.1 + 腕力 + 耐力 * 0.1 + 速度 * 0.05
  * @param {Number} V 隨機變數
  */
-export const getAtk = ({ GF, V }) => GF + V
+export const getAtk = ([hp, atk, def, agi]) => (hp + def) * 0.1 + atk + agi * 0.05
 
 /**
- * 防 = 體力 * 0.1 + 腕力 * 0.1 + 耐力 + 速度
+ * 防 = 體力 * 0.1 + 腕力 * 0.1 + 耐力 + 速度 * 0.05
  * @param {Number} V 隨機變數
  */
-export const getDef = ({ GF, V }) => GF + V
+export const getDef = ([hp, atk, def, agi]) => (hp + atk) * 0.1 + def + agi * 0.05
 
 /**
  * 敏 = 速度
  * @param {Number} v 敏
  */
-export const getAgi = (v) => v
+export const getAgi = ([hp, atk, def, agi]) => agi
 
 export const calc = (GPF, GPFR, f) => {
     const base = GPF.map((v, i) => v + GPFR[i] + f[i])
-    const fourWei = base.map(ISI => getISV({ LV: 1, GC: 4, IA: 26, ISI }))
-    const hp = getAgi(fourWei[1])
-    const hp = getAgi(fourWei[2])
-    const hp = getAgi(fourWei[3])
-    const agi = getAgi(fourWei[4])
-    console.log(fourWei)
+    const health = base.map(ISI => getISV({ LV: 1, GC: 4, IA: 26, ISI }))
+    const [hhp, hatk, hdef, hagi] = health
+    const hp = getHp(health)
+    const atk = getAtk(health)
+    const def = getDef(health)
+    const agi = getAgi(health)
+    return {
+        health: {
+            hhp,
+            hatk,
+            hdef,
+            hagi
+        },
+        fourWei: {
+            hp,
+            atk,
+            def,
+            agi
+        }
+    }
 }
 // ;[...Array(4).keys()].forEach((i) => {
 //     ;[...Array(5).keys()]
