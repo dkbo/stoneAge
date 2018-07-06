@@ -9,21 +9,18 @@ const router = new Router({
             path: '/',
             name: 'Home',
             meta: {
-                title: ''
+                title: '野生檔次試算'
             },
-            component: r => require.ensure([], () => r(require('@V/Home')), 'Home'),
-            // children: [
-            //     {
-            //         path: 'Dashboard',
-            //         name: 'Dashboard',
-            //         meta: {
-            //             title: '盈亏统计'
-            //         },
-            //         component: r => require.ensure([], () => r(require('@V/Dashboard')), 'Dashboard')
-            //     }
-            // ]
+            component: r => require.ensure([], () => r(require('@V/Home')), 'Home')
+        },
+        {
+            path: '/test',
+            name: 'Home',
+            meta: {
+                title: '野生檔次試算2'
+            },
+            component: r => require.ensure([], () => r(require('@V/Home')), 'Home')
         }
     ]
 })
-
 export default router

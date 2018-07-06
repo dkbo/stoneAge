@@ -1,14 +1,78 @@
 <template>
-  <div class="container">
-    <Table border :columns="columns" :data="data" />
+    <div class="container">
+    <Row>
+        <Col span="12">
+            <Row>
+                <Col span="24">
+                    <Button
+                        type="success"
+                        icon="ios-search"
+                        long
+                    >
+                        基礎素質
+                    </Button>
+                </Col>
+            </Row>
+            <FourInput
+                :v="GPF"
+                :PH="['體', '腕', '耐', '速']"
+            />
+            <Row>
+                <Col span="24">
+                    <Button
+                        type="info"
+                        long
+                    >
+                        初始隨機(10)
+                    </Button>
+                </Col>
+            </Row>
+            <FourInput
+                :v="GPFR"
+                :PH="['檔次體', '檔次腕', '檔次耐', '檔次速']"
+            />
+            <Row>
+                <Col span="24">
+                    <Button
+                        type="info"
+                        long
+                    >
+                        隨機成長檔次
+                    </Button>
+                </Col>
+            </Row>
+            <FourInput
+                :v="f"
+                :PH="['檔次體', '檔次腕', '檔次耐', '檔次速']"
+            />
+            <Row>
+                <Col span="24">
+                    <Button
+                        type="success"
+                        long
+                        icon="ios-search"
+                        @click="handleCalc"
+                    >
+                        計算
+                    </Button>
+                </Col>
+            </Row>
+        </Col>
+        <Col span="12">
+
+        </Col>
+    </Row>
+    <Row>
+        <Col span="24">
+            <Table border :columns="columns" :data="data" />
+        </Col>
+    </Row>
+
   </div>
 </template>
 <script>
 import { calc } from '@UTIL'
-const GPF = [24, 38, 16, 20] // 體,腕,耐,速
-const GPFR = [1, 3, 3, 3] // 體,腕,耐,速
-const f = [2, 2, 2, 2] // 體,腕,耐,速
-const data = calc(GPF, GPFR, f)
+import FourInput from '@C/FourInput'
 export default {
     name: 'Home',
     data() {
@@ -64,30 +128,37 @@ export default {
                 }
             ]
         }
+        const arr = [
+            '',
+            '',
+            '',
+            ''
+        ]
         return {
+            GPF: [...arr], //[24, 38, 16, 20]
+            GPFR: [...arr], //[1, 3, 3, 3]
+            f: [...arr],
             columns: [
                 health,
                 ininFourWei
             ],
             data: [
-                {
-                    ...data.health,
-                    ...data.fourWei
-                }
             ]
         }
     },
     computed: {
     },
     methods: {
-        show (index) {
-            this.$Modal.info({
-                title: 'User Info',
-                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+        handleCalc() {
+            const { fourWei, health } = calc(this.GPF, this.GPFR, this.f)
+            this.data.push({
+                ...fourWei,
+                ...health
             })
         }
     },
     components: {
+        FourInput
     }
 }
 </script>
