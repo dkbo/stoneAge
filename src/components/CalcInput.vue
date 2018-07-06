@@ -7,7 +7,7 @@
 </template>
 <script>
 export default {
-    name: 'FourInput',
+    name: 'CalcInput',
     props: {
         v: Array,
         PH: Array

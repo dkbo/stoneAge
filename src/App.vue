@@ -16,7 +16,7 @@
                 <h1 align="center">{{$route.meta.title}}</h1>
             </Header>
             <Content :style="{margin: '20px', background: '#fff'}">
-                <router-view />
+                <router-view  />
             </Content>
         </Layout>
     </Layout>

@@ -13,7 +13,7 @@
                     </Button>
                 </Col>
             </Row>
-            <FourInput
+            <CalcInput
                 :v="GPF"
                 :PH="['體', '腕', '耐', '速']"
             />
@@ -27,7 +27,7 @@
                     </Button>
                 </Col>
             </Row>
-            <FourInput
+            <CalcInput
                 :v="GPFR"
                 :PH="['檔次體', '檔次腕', '檔次耐', '檔次速']"
             />
@@ -41,7 +41,7 @@
                     </Button>
                 </Col>
             </Row>
-            <FourInput
+            <CalcInput
                 :v="f"
                 :PH="['檔次體', '檔次腕', '檔次耐', '檔次速']"
             />
@@ -71,8 +71,8 @@
   </div>
 </template>
 <script>
-import { calc } from '@UTIL'
-import FourInput from '@C/FourInput'
+import { calc, fileArr } from '@UTIL'
+import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
     data() {
@@ -150,15 +150,21 @@ export default {
     },
     methods: {
         handleCalc() {
-            const { fourWei, health } = calc(this.GPF, this.GPFR, this.f)
-            this.data.push({
-                ...fourWei,
-                ...health
-            })
+            if (this.tempDate[this.GPF.join('.')]) {
+
+            } else {
+                fileArr.forEach((arr) => {
+                    const { fourWei, health } = calc(this.GPF, this.GPFR, arr)
+                    this.data.push({
+                        ...fourWei,
+                        ...health
+                    })
+                })
+            }
         }
     },
     components: {
-        FourInput
+        CalcInput
     }
 }
 </script>

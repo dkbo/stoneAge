@@ -168,10 +168,37 @@ export const calc = (GPF, GPFR, f) => {
         }
     }
 }
-// ;[...Array(4).keys()].forEach((i) => {
-//     ;[...Array(5).keys()]
-//     .map(i => i - 2)
-//     .forEach((i) => {
 
-//     })
-// })
+const combination = (arr) => {
+    let results = []
+    let result = []
+    const doExchange = (arr, depth) => {
+        for (var i = 0; i < arr[depth].length; i++) {
+            result[depth] = arr[depth][i]
+            if (depth !== arr.length - 1) {
+                doExchange(arr, depth + 1)
+            } else {
+                results.push([...result])
+            }
+        }
+    }
+    doExchange(arr, 0)
+    return results
+}
+const fileData = [2, 1, 0, -1, -2]
+const fileDataArr = [
+    fileData,
+    fileData,
+    fileData,
+    fileData
+]
+export const fileArr = combination(fileDataArr)
+
+const baseRandomFileData = [...Array(11).keys()]
+const baseRandomFileDataArr = [
+    baseRandomFileData,
+    baseRandomFileData,
+    baseRandomFileData,
+    baseRandomFileData
+]
+export const randomFileArr = combination(baseRandomFileDataArr).filter(arr => (arr.reduce((a, b) => a + b)) === 10)

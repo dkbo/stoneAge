@@ -28,7 +28,7 @@ Vue.use(iView)
 Vue.use(VueRx, { Observable, Subscription })
 
 Vue.config.productionTip = false
-
+Vue.prototype.tempDate = {}
 const vue$ = new Vue({
     el: '#app',
     router,
