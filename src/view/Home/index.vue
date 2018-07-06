@@ -15,7 +15,7 @@
             </Row>
             <CalcInput
                 :v="GPF"
-                :PH="['體', '腕', '耐', '速']"
+                :PH="['等級', '係數', '體', '腕', '耐', '速']"
             />
             <Row>
                 <Col span="24">
@@ -52,6 +52,7 @@
                         long
                         icon="ios-search"
                         @click="handleCalc"
+                        :loading="loading"
                     >
                         計算
                     </Button>
@@ -71,7 +72,7 @@
   </div>
 </template>
 <script>
-import { calc, fileArr } from '@UTIL'
+import { calc, calcAll } from '@UTIL'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
@@ -135,8 +136,11 @@ export default {
             ''
         ]
         return {
-            GPF: [...arr], //[24, 38, 16, 20]
-            GPFR: [...arr], //[1, 3, 3, 3]
+            loading: false,
+            // GPF: [...arr], //[24, 38, 16, 20]
+            GPF: [1, 26, 24, 38, 16, 20], //[24, 38, 16, 20]
+            // GPFR: [...arr], //[1, 3, 3, 3]
+            GPFR: [1, 3, 3, 3], //[1, 3, 3, 3]
             f: [...arr],
             columns: [
                 health,
@@ -149,18 +153,18 @@ export default {
     computed: {
     },
     methods: {
-        handleCalc() {
-            if (this.tempDate[this.GPF.join('.')]) {
-
-            } else {
-                fileArr.forEach((arr) => {
-                    const { fourWei, health } = calc(this.GPF, this.GPFR, arr)
-                    this.data.push({
-                        ...fourWei,
-                        ...health
-                    })
-                })
-            }
+        async handleCalc() {
+            // const a = +new Date()
+                let map
+                if (this.tempDate[this.GPF.join()]) {
+                    map = this.tempDate[this.GPF.join()]
+                } else {
+                    this.loading = true
+                    this.tempDate[this.GPF.join()] = map = await calcAll(this.GPF)
+                }
+                const showData = map.get(this.f.join() + this.GPFR.join())
+                this.data = [showData]
+                this.loading = false
         }
     },
     components: {

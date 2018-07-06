@@ -1,6 +1,6 @@
 <template>
     <Row>
-        <Col :span="24 / v.length" v-for="(data, i) in v">
+        <Col :span="24 / v.length" v-for="(data, i) in v" :key="i">
             <Input number v-model="v[i]" :placeholder="PH[i]" />
         </Col>
     </Row>

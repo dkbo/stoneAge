@@ -6,6 +6,7 @@
                 class="link"
                 :to="path"
                 :exact="path === '/'"
+                :key="path"
             >
                 {{meta.title}}
             </router-link>

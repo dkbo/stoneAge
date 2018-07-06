@@ -102,6 +102,7 @@ export const getStorage = (key, isJson = true) => {
 export const returnState = data => JSON.parse(JSON.stringify(data))
 
 /******************* 計算公式 *******************/
+let tempISV = {}
 /**
  * 初始單項數值 = ((等級 - 1) * 野生寵成長係數 + 初始能力係數) * 初始單項變數 / 100
  * @param {Number} lv 等級
@@ -145,26 +146,26 @@ export const getDef = ([hp, atk, def, agi]) => (hp + atk) * 0.1 + def + agi * 0.
  */
 export const getAgi = ([hp, atk, def, agi]) => agi
 
-export const calc = (GPF, GPFR, f) => {
-    const base = GPF.map((v, i) => v + GPFR[i] + f[i])
-    const health = base.map(ISI => getISV({ LV: 1, GC: 4, IA: 26, ISI }))
-    const [hhp, hatk, hdef, hagi] = health
+export const calc = ({ GC = 4, GPF, GPFR, f }) => {
+    const [LV, IA, ...gpf] = GPF
+    const base = gpf.map((v, i) => v + GPFR[i] + f[i])
+    const health = base.map(ISI => getISV({ LV, GC, IA, ISI }))
     const hp = getHp(health)
     const atk = getAtk(health)
     const def = getDef(health)
     const agi = getAgi(health)
     return {
         health: {
-            hhp,
-            hatk,
-            hdef,
-            hagi
+            hhp: health[0].toFixed(3),
+            hatk: health[1].toFixed(3),
+            hdef: health[2].toFixed(3),
+            hagi: health[3].toFixed(3)
         },
         fourWei: {
-            hp,
-            atk,
-            def,
-            agi
+            hp: hp.toFixed(3),
+            atk: atk.toFixed(3),
+            def: def.toFixed(3),
+            agi: agi.toFixed(3)
         }
     }
 }
@@ -192,7 +193,7 @@ const fileDataArr = [
     fileData,
     fileData
 ]
-export const fileArr = combination(fileDataArr)
+const fileArr = combination(fileDataArr)
 
 const baseRandomFileData = [...Array(11).keys()]
 const baseRandomFileDataArr = [
@@ -201,4 +202,27 @@ const baseRandomFileDataArr = [
     baseRandomFileData,
     baseRandomFileData
 ]
-export const randomFileArr = combination(baseRandomFileDataArr).filter(arr => (arr.reduce((a, b) => a + b)) === 10)
+const randomFileArr = combination(baseRandomFileDataArr).filter(arr => (arr.reduce((a, b) => a + b)) === 10)
+
+export const calcAll = (GPF) =>
+    new Promise((resolve) => {
+        let map = new Map()
+        setTimeout(() => {
+            fileArr.forEach((f) => {
+                randomFileArr.forEach((GPFR) => {
+                    const { fourWei, health } = calc({
+                        GPF,
+                        GPFR,
+                        f
+                    })
+                    map.set(f.join() + GPFR.join(), {
+                        ...fourWei,
+                        ...health,
+                        GPFR,
+                        f
+                    })
+                })
+            })
+            resolve(map)
+        }, 50)
+    })
