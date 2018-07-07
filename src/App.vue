@@ -54,7 +54,6 @@
         },
         computed: {
             menuitemClasses: function () {
-                console.log(this.$router)
                 return [
                     'menu-item',
                     this.isCollapsed ? 'collapsed-menu' : ''

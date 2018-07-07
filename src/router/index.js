@@ -7,19 +7,19 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            name: 'Home',
+            name: 'CalcFourWei',
             meta: {
-                title: '野生檔次試算'
+                title: '檔次算四圍'
             },
-            component: r => require.ensure([], () => r(require('@V/Home')), 'Home')
+            component: r => require.ensure([], () => r(require('@V/CalcFourWei')), 'CalcFourWei')
         },
         {
-            path: '/test',
-            name: 'Home',
+            path: '/CalcGF',
+            name: 'CalcGF',
             meta: {
-                title: '野生檔次試算2'
+                title: '四圍算檔次'
             },
-            component: r => require.ensure([], () => r(require('@V/Home')), 'Home')
+            component: r => require.ensure([], () => r(require('@V/CalcGF')), 'CalcGF')
         }
     ]
 })

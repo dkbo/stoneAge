@@ -150,23 +150,23 @@ export const calc = ({ GC = 4, GPF, GPFR, f }) => {
     const [LV, IA, ...gpf] = GPF
     const base = gpf.map((v, i) => v + GPFR[i] + f[i])
     const health = base.map(ISI => getISV({ LV, GC, IA, ISI }))
-    const hp = getHp(health)
-    const atk = getAtk(health)
-    const def = getDef(health)
-    const agi = getAgi(health)
+    const hp = getHp(health).toFixed(3)
+    const atk = getAtk(health).toFixed(3)
+    const def = getDef(health).toFixed(3)
+    const agi = getAgi(health).toFixed(3)
     return {
         health: {
-            hhp: health[0].toFixed(3),
-            hatk: health[1].toFixed(3),
-            hdef: health[2].toFixed(3),
-            hagi: health[3].toFixed(3)
+            hhp: health[0],
+            hatk: health[1],
+            hdef: health[2],
+            hagi: health[3]
         },
-        fourWei: {
-            hp: hp.toFixed(3),
-            atk: atk.toFixed(3),
-            def: def.toFixed(3),
-            agi: agi.toFixed(3)
-        }
+        fourWei: [
+            hp,
+            atk,
+            def,
+            agi
+        ]
     }
 }
 
@@ -186,7 +186,7 @@ const combination = (arr) => {
     doExchange(arr, 0)
     return results
 }
-const fileData = [2, 1, 0, -1, -2]
+const fileData = [-2, -1, 0, 1, 2]
 const fileDataArr = [
     fileData,
     fileData,
@@ -206,21 +206,32 @@ const randomFileArr = combination(baseRandomFileDataArr).filter(arr => (arr.redu
 
 export const calcAll = (GPF) =>
     new Promise((resolve) => {
-        let map = new Map()
+        let map = {}
         setTimeout(() => {
-            fileArr.forEach((f) => {
-                randomFileArr.forEach((GPFR) => {
-                    const { fourWei, health } = calc({
+            fileArr.forEach(([fhp, fatk, fdef, fagi]) => {
+                randomFileArr.forEach(([ghp, gatk, gdef, gagi]) => {
+                    const { fourWei: [hp, atk, def, agi], health } = calc({
                         GPF,
-                        GPFR,
-                        f
+                        GPFR: [ghp, gatk, gdef, gagi],
+                        f: [fhp, fatk, fdef, fagi]
                     })
-                    map.set(f.join() + GPFR.join(), {
-                        ...fourWei,
-                        ...health,
-                        GPFR,
-                        f
-                    })
+                    const data = {
+                        hp,
+                        atk,
+                        def,
+                        agi,
+                        ghp,
+                        gatk,
+                        gdef,
+                        gagi,
+                        fhp,
+                        fatk,
+                        fdef,
+                        fagi,
+                        ...health
+                    }
+                    const key = `${~~hp},${~~atk},${~~def},${~~agi}`
+                    map[key] ? map[key].push(data) : (map[key] = [data])
                 })
             })
             resolve(map)

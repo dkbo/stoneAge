@@ -52,7 +52,6 @@
                         long
                         icon="ios-search"
                         @click="handleCalc"
-                        :loading="loading"
                     >
                         計算
                     </Button>
@@ -72,7 +71,7 @@
   </div>
 </template>
 <script>
-import { calc, calcAll } from '@UTIL'
+import { calc } from '@UTIL'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
@@ -109,22 +108,22 @@ export default {
             children: [
                 {
                     title: '血',
-                    key: 'hp',
+                    key: 'fhp',
                     align: 'center'
                 },
                 {
                     title: '攻',
-                    key: 'atk',
+                    key: 'fatk',
                     align: 'center'
                 },
                 {
                     title: '防',
-                    key: 'def',
+                    key: 'fdef',
                     align: 'center'
                 },
                 {
                     title: '敏',
-                    key: 'agi',
+                    key: 'fagi',
                     align: 'center'
                 }
             ]
@@ -136,7 +135,6 @@ export default {
             ''
         ]
         return {
-            loading: false,
             // GPF: [...arr], //[24, 38, 16, 20]
             GPF: [1, 26, 24, 38, 16, 20], //[24, 38, 16, 20]
             // GPFR: [...arr], //[1, 3, 3, 3]
@@ -154,17 +152,14 @@ export default {
     },
     methods: {
         async handleCalc() {
-            // const a = +new Date()
-                let map
-                if (this.tempDate[this.GPF.join()]) {
-                    map = this.tempDate[this.GPF.join()]
-                } else {
-                    this.loading = true
-                    this.tempDate[this.GPF.join()] = map = await calcAll(this.GPF)
-                }
-                const showData = map.get(this.f.join() + this.GPFR.join())
-                this.data = [showData]
-                this.loading = false
+                const { fourWei: [fhp, fatk, fdef, fagi], health } = calc(this)
+                this.data = [{
+                    fhp,
+                    fatk,
+                    fdef,
+                    fagi,
+                    ...health
+                }]
         }
     },
     components: {
