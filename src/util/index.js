@@ -123,6 +123,14 @@ export const getISV = ({ LV, GC, IA, ISI }) => ((LV - 1) * GC + IA) * ISI / 100
 export const getSV = ({ GF, V }) => GF + V
 
 /**
+ * 平均單項成長率 = (單項成長檔 + 單項隨機成長變數) * 隨機檔次補正係數 / 100
+ * @param {Number} ISI 單項成長檔
+ * @param {Number} ISR 單項隨機成長變數
+ * @param {Number} FV 隨機檔次補正係數
+ */
+export const getAGV = ({ ISI, ISR = 2.5, FV }) => ~~(((ISI + ISR) * FV / 100).toFixed(3) * 100) / 100
+
+/**
  * 血 = 體力 * 4 + 腕力 + 耐力 + 速度
  * @param {Number} V 隨機變數
  */
@@ -145,15 +153,75 @@ export const getDef = ([hp, atk, def, agi]) => (hp + atk) * 0.1 + def + agi * 0.
  * @param {Number} v 敏
  */
 export const getAgi = ([hp, atk, def, agi]) => agi
+/**
+ * 檔次補正係數
+ */
+const FV = [
+    {
+        h: 5.0,
+        m: 4.75,
+        l: 4.5
+    },
+    {
+        h: 5.2,
+        m: 4.95,
+        l: 4.7
+    },
+    {
+        h: 5.4,
+        m: 5.15,
+        l: 4.9
+    },
+    {
+        h: 5.6,
+        m: 5.35,
+        l: 5.1
+    },
+    {
+        h: 5.8,
+        m: 5.55,
+        l: 5.3
+    },
+    {
+        h: 6.0,
+        m: 5.75,
+        l: 5.5
+    }
+]
+/**
+ * 檔次補正係數
+ */
+export const getFV = (gpf) => {
+    const val = gpf.reduce((a, b) => a + b)
+    if (val > 100) {
+        return FV[0]
+    } else if (val >= 95) {
+        return FV[1]
+    } else if (val >= 90) {
+        return FV[2]
+    } else if (val >= 85) {
+        return FV[3]
+    } else if (val >= 80) {
+        return FV[4]
+    } else {
+        return FV[5]
+    }
+}
 
-export const calc = ({ GC = 4, GPF, GPFR, f }) => {
+export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
     const [LV, IA, ...gpf] = GPF
     const base = gpf.map((v, i) => v + GPFR[i] + f[i])
     const health = base.map(ISI => getISV({ LV, GC, IA, ISI }))
-    const hp = getHp(health).toFixed(3)
-    const atk = getAtk(health).toFixed(3)
-    const def = getDef(health).toFixed(3)
-    const agi = getAgi(health).toFixed(3)
+    const gRate = gpf.map((v, i) => getAGV({ISI: v + f[i], FV}))
+    const hp = +getHp(health).toFixed(2)
+    const atk = +getAtk(health).toFixed(2)
+    const def = +getDef(health).toFixed(2)
+    const agi = +getAgi(health).toFixed(2)
+    const vhp = +getHp(gRate).toFixed(4)
+    const vatk = +getAtk(gRate).toFixed(4)
+    const vdef = +getDef(gRate).toFixed(4)
+    const vagi = +getAgi(gRate).toFixed(4)
+    const vSum = +(vatk + vdef + vagi).toFixed(4)
     return {
         health: {
             hhp: health[0],
@@ -166,7 +234,14 @@ export const calc = ({ GC = 4, GPF, GPFR, f }) => {
             atk,
             def,
             agi
-        ]
+        ],
+        gRate: {
+            vhp,
+            vatk,
+            vdef,
+            vagi,
+            vSum
+        }
     }
 }
 
@@ -207,13 +282,16 @@ const randomFileArr = combination(baseRandomFileDataArr).filter(arr => (arr.redu
 export const calcAll = (GPF) =>
     new Promise((resolve) => {
         let map = {}
+        const [a, b, ...gpf] = GPF
+        const FV = getFV(gpf).m
         setTimeout(() => {
             fileArr.forEach(([fhp, fatk, fdef, fagi]) => {
                 randomFileArr.forEach(([ghp, gatk, gdef, gagi]) => {
-                    const { fourWei: [hp, atk, def, agi], health } = calc({
+                    const { fourWei: [hp, atk, def, agi], health, gRate } = calc({
                         GPF,
                         GPFR: [ghp, gatk, gdef, gagi],
-                        f: [fhp, fatk, fdef, fagi]
+                        f: [fhp, fatk, fdef, fagi],
+                        FV
                     })
                     const data = {
                         hp,
@@ -228,7 +306,8 @@ export const calcAll = (GPF) =>
                         fatk,
                         fdef,
                         fagi,
-                        ...health
+                        ...health,
+                        ...gRate
                     }
                     const key = `${~~hp},${~~atk},${~~def},${~~agi}`
                     map[key] ? map[key].push(data) : (map[key] = [data])

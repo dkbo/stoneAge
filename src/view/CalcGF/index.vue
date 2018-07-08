@@ -145,6 +145,37 @@ export default {
                 }
             ]
         }
+        const gRate = {
+            title: '成長率',
+            align: 'center',
+            children: [
+                {
+                    title: '血',
+                    key: 'vhp',
+                    align: 'center'
+                },
+                {
+                    title: '攻',
+                    key: 'vatk',
+                    align: 'center'
+                },
+                {
+                    title: '防',
+                    key: 'vdef',
+                    align: 'center'
+                },
+                {
+                    title: '敏',
+                    key: 'vagi',
+                    align: 'center'
+                },
+                {
+                    title: '成長',
+                    key: 'vSum',
+                    align: 'center'
+                }
+            ]
+        }
         const arr = [
             '',
             '',
@@ -161,7 +192,8 @@ export default {
             columns: [
                 health2,
                 health,
-                fileLevel
+                fileLevel,
+                gRate
             ],
             data: [
             ]

@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import { calc } from '@UTIL'
+import { calc, getFV } from '@UTIL'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
@@ -128,6 +128,37 @@ export default {
                 }
             ]
         }
+        const gRate = {
+            title: '成長率',
+            align: 'center',
+            children: [
+                {
+                    title: '血',
+                    key: 'vhp',
+                    align: 'center'
+                },
+                {
+                    title: '攻',
+                    key: 'vatk',
+                    align: 'center'
+                },
+                {
+                    title: '防',
+                    key: 'vdef',
+                    align: 'center'
+                },
+                {
+                    title: '敏',
+                    key: 'vagi',
+                    align: 'center'
+                },
+                {
+                    title: '成長',
+                    key: 'vSum',
+                    align: 'center'
+                }
+            ]
+        }
         const arr = [
             '',
             '',
@@ -140,9 +171,11 @@ export default {
             // GPFR: [...arr], //[1, 3, 3, 3]
             GPFR: [1, 3, 3, 3], //[1, 3, 3, 3]
             f: [...arr],
+            FV: null,
             columns: [
                 health,
-                ininFourWei
+                ininFourWei,
+                gRate
             ],
             data: [
             ]
@@ -152,14 +185,17 @@ export default {
     },
     methods: {
         async handleCalc() {
-                const { fourWei: [fhp, fatk, fdef, fagi], health } = calc(this)
-                this.data = [{
-                    fhp,
-                    fatk,
-                    fdef,
-                    fagi,
-                    ...health
-                }]
+            const [a, b, ...gpf] = this.GPF
+            this.FV = getFV(gpf).m
+            const { fourWei: [fhp, fatk, fdef, fagi], health, gRate } = calc(this)
+            this.data = [{
+                fhp,
+                fatk,
+                fdef,
+                fagi,
+                ...health,
+                ...gRate
+            }]
         }
     },
     components: {
