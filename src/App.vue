@@ -1,5 +1,5 @@
 <template>
-    <Layout :style="{minHeight: '100vh'}">
+    <Layout :style="{minHeight: '100vh', minWidth: '980px'}">
         <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
             <router-link
                 v-for="{path, meta} in $router.options.routes"

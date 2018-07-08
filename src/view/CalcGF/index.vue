@@ -4,16 +4,25 @@
         <Col span="12">
             <Row>
                 <Col span="8">
-                    <Input v-model="name" placeholder="寵物名稱" />
-                </Col>
-                <Col span="16">
                     <Button
-                        type="success"
-                        icon="ios-search"
+                        type="info"
                         long
                     >
                         基礎素質
                     </Button>
+                </Col>
+                <Col span="8">
+                    <Select 
+                        v-model="name2"
+                        @input="handleChange"
+                        filterable
+                        long
+                    >
+                        <Option v-for="(pet, i) in petData" :value="i" :key="pet.name" :label="pet.name" />
+                    </Select>
+                </Col>
+                <Col span="8">
+                    <Input v-model="name" placeholder="寵物名稱" />
                 </Col>
             </Row>
             <CalcInput
@@ -49,7 +58,7 @@
         </Col>
         <Col span="12">
             <Button
-                type="success"
+                type="ghost"
                 long
                 icon="ios-search"
                 @click="handleRecodeCalc(i)"
@@ -75,6 +84,7 @@
 </template>
 <script>
 import { calc, calcAll, setStorage, getStorage } from '@UTIL'
+import petData from '@UTIL/petData'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
@@ -219,11 +229,10 @@ export default {
         return {
             loading: false,
             name: '',
-            // GPF: [...arr], //[24, 38, 16, 20]
-            GPF: [1, 22, 25, 23, 40, 6], //[24, 38, 16, 20]
-            // GPF: [1, 26, 24, 38, 16, 20], //[24, 38, 16, 20]
-            FW: [116, 20, 29, 5],
-            // FW: [...arr],
+            name2: '',
+            GPF: ['', '', ...arr],
+            FW: [...arr],
+            petData,
             columns: [
                 health2,
                 health,
@@ -238,6 +247,11 @@ export default {
     computed: {
     },
     methods: {
+        handleChange(i) {
+            const { name, GPF } = petData[i]
+            this.GPF = [this.GPF[0], ...GPF]
+            this.name = name
+        },
         async handleCalc(isStorage = true) {
             // const a = +new Date()
             this.loading = true

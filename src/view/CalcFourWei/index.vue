@@ -4,16 +4,25 @@
         <Col span="12">
             <Row>
                 <Col span="8">
-                    <Input v-model="name" placeholder="寵物名稱" />
-                </Col>
-                <Col span="16">
                     <Button
-                        type="success"
-                        icon="ios-search"
+                        type="info"
                         long
                     >
                         基礎素質
                     </Button>
+                </Col>
+                <Col span="8">
+                    <Select 
+                        v-model="name2"
+                        @input="handleChange"
+                        filterable
+                        long
+                    >
+                        <Option v-for="(pet, i) in petData" :value="i" :key="pet.name" :label="pet.name" />
+                    </Select>
+                </Col>
+                <Col span="8">
+                    <Input v-model="name" placeholder="寵物名稱" />
                 </Col>
             </Row>
             <CalcInput
@@ -26,7 +35,7 @@
                         type="info"
                         long
                     >
-                        初始隨機(10)
+                        初始隨機(相加總合10)
                     </Button>
                 </Col>
             </Row>
@@ -40,7 +49,7 @@
                         type="info"
                         long
                     >
-                        隨機成長檔次
+                        隨機檔次(-2 ~ +2)
                     </Button>
                 </Col>
             </Row>
@@ -63,7 +72,7 @@
         </Col>
         <Col span="12">
             <Button
-                type="success"
+                type="ghost"
                 long
                 @click="handleRecodeCalc(i)"
                 v-for="({name, GPF, GPFR, f}, i) in storage"
@@ -84,6 +93,7 @@
 </template>
 <script>
 import { calc, getFV, setStorage, getStorage } from '@UTIL'
+import petData from '@UTIL/petData'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
@@ -190,11 +200,11 @@ export default {
             ''
         ]
         return {
+            petData,
             name: '',
-            // GPF: [...arr], //[24, 38, 16, 20]
-            GPF: [1, 26, 24, 38, 16, 20], //[24, 38, 16, 20]
-            // GPFR: [...arr], //[1, 3, 3, 3]
-            GPFR: [1, 3, 3, 3], //[1, 3, 3, 3]
+            name2: '',
+            GPF: ['', '', ...arr], //[24, 38, 16, 20]
+            GPFR: [...arr], //[1, 3, 3, 3]
             f: [...arr],
             FV: null,
             columns: [
@@ -210,6 +220,11 @@ export default {
     computed: {
     },
     methods: {
+        handleChange(i) {
+            const { name, GPF } = petData[i]
+            this.GPF = [this.GPF[0], ...GPF]
+            this.name = name
+        },
         handleCalc(isStorage = true) {
             const [a, b, ...gpf] = this.GPF
             this.FV = getFV(gpf).m
