@@ -11,6 +11,7 @@ import '../css/main.scss'
 
 // UI 組件
 import iView from './components/iViewMain'
+import locale from 'iview/dist/locale/zh-TW'
 import '../css/my-theme.less'
 
 import VueRx from 'vue-rx'
@@ -24,7 +25,7 @@ import { Subscription } from 'rxjs/Subscription'
 // import 'rxjs/add/operator/do'
 // import 'rxjs/add/operator/share'
 // import 'rxjs/add/operator/throttleTime'
-Vue.use(iView)
+Vue.use(iView, { locale })
 Vue.use(VueRx, { Observable, Subscription })
 
 Vue.config.productionTip = false

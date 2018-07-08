@@ -3,7 +3,10 @@
     <Row>
         <Col span="12">
             <Row>
-                <Col span="24">
+                <Col span="8">
+                    <Input v-model="name" placeholder="寵物名稱" />
+                </Col>
+                <Col span="16">
                     <Button
                         type="success"
                         icon="ios-search"
@@ -45,7 +48,16 @@
             </Row>
         </Col>
         <Col span="12">
-
+            <Button
+                type="success"
+                long
+                icon="ios-search"
+                @click="handleRecodeCalc(i)"
+                v-for="({GPF, FW, name}, i) in storage"
+                :key="i"
+            >
+                {{`${name} ${GPF.join()}|${FW.join()}`}}
+            </Button>
         </Col>
     </Row>
     <Row>
@@ -62,117 +74,139 @@
   </div>
 </template>
 <script>
-import { calc, calcAll } from '@UTIL'
+import { calc, calcAll, setStorage, getStorage } from '@UTIL'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
     data() {
+        const storage = getStorage('CalcGF') || []
         const health2 = {
             title: '四圍',
             align: 'center',
+            className: 'color1',
             children: [
                 {
                     title: '體',
                     key: 'hp',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 },
                 {
                     title: '腕',
                     key: 'atk',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 },
                 {
                     title: '耐',
                     key: 'def',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 },
                 {
                     title: '速',
                     key: 'agi',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 }
             ]
         }
         const health = {
             title: '隨機係數(10)',
             align: 'center',
+            className: 'color2',
             children: [
                 {
                     title: '體',
                     key: 'ghp',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color2'
                 },
                 {
                     title: '腕',
                     key: 'gatk',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color2'
                 },
                 {
                     title: '耐',
                     key: 'gdef',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color2'
                 },
                 {
                     title: '速',
                     key: 'gagi',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color2'
                 }
             ]
         }
         const fileLevel = {
             title: '檔次',
             align: 'center',
+            className: 'color3',
             children: [
                 {
                     title: '體',
                     key: 'fhp',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color3'
                 },
                 {
                     title: '腕',
                     key: 'fatk',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color3'
                 },
                 {
                     title: '耐',
                     key: 'fdef',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color3'
                 },
                 {
                     title: '速',
                     key: 'fagi',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color3'
                 }
             ]
         }
         const gRate = {
             title: '成長率',
             align: 'center',
+            className: 'color5',
             children: [
                 {
                     title: '血',
                     key: 'vhp',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '攻',
                     key: 'vatk',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '防',
                     key: 'vdef',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '敏',
                     key: 'vagi',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '成長',
                     key: 'vSum',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 }
             ]
         }
@@ -184,6 +218,7 @@ export default {
         ]
         return {
             loading: false,
+            name: '',
             // GPF: [...arr], //[24, 38, 16, 20]
             GPF: [1, 22, 25, 23, 40, 6], //[24, 38, 16, 20]
             // GPF: [1, 26, 24, 38, 16, 20], //[24, 38, 16, 20]
@@ -196,24 +231,40 @@ export default {
                 gRate
             ],
             data: [
-            ]
+            ],
+            storage
         }
     },
     computed: {
     },
     methods: {
-        async handleCalc() {
+        async handleCalc(isStorage = true) {
             // const a = +new Date()
             this.loading = true
-            const key = this.GPF.join()
+            const GPF = [...this.GPF]
+            const FW = [...this.FW]
+            const name = this.name
+            const key = GPF.join()
             let map = this.tempDate[key]
             if (!map) {
-                this.tempDate[key] = map = await calcAll(this.GPF)
+                this.tempDate[key] = map = await calcAll(GPF)
             }
             setTimeout(() => {
-                this.data = map[this.FW.join()] ? [...map[this.FW.join()]] : []
+                this.data = map[FW.join()] ? [...map[FW.join()]] : []
+                if (isStorage) {
+                    this.storage.unshift({ name, GPF, FW })
+                    this.storage.length > 5 && this.storage.pop()
+                    setStorage('CalcGF', this.storage)
+                }
                 this.loading = false
             }, 50)
+        },
+        handleRecodeCalc(i) {
+            const { GPF, FW, name } = this.storage[i]
+            this.name = name
+            this.GPF = [...GPF]
+            this.FW = [...FW]
+            this.handleCalc(false)
         }
     },
     components: {

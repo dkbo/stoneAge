@@ -50,7 +50,7 @@ import Table from 'iView/src/components/table'
 // import Upload from 'iView/src/components/upload'
 import {Row, Col} from 'iView/src/components/grid'
 import {Select, Option, OptionGroup} from 'iView/src/components/select'
-// import locale from 'iView/src/locale/index'
+import locale from 'iView/src/locale/index'
 const components = {
     Affix,
     // Alert,
@@ -142,7 +142,7 @@ const iview = {
 
 const install = function(Vue, opts = {}) {
     if (install.installed) return
-    // locale.use(opts.locale)
+    locale.use(opts.locale)
     // locale.i18n(opts.i18n)
 
     Object.keys(iview).forEach(key => {
@@ -163,7 +163,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 const API = {
     version: process.env.VERSION, // eslint-disable-line no-undef
-    // locale: locale.use,
+    locale: locale.use,
     // i18n: locale.i18n,
     install,
     // Circle,

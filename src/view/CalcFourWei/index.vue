@@ -3,7 +3,10 @@
     <Row>
         <Col span="12">
             <Row>
-                <Col span="24">
+                <Col span="8">
+                    <Input v-model="name" placeholder="寵物名稱" />
+                </Col>
+                <Col span="16">
                     <Button
                         type="success"
                         icon="ios-search"
@@ -59,7 +62,16 @@
             </Row>
         </Col>
         <Col span="12">
-
+            <Button
+                type="success"
+                long
+                @click="handleRecodeCalc(i)"
+                v-for="({name, GPF, GPFR, f}, i) in storage"
+                icon="ios-search"
+                :key="i"
+            >
+                {{`${name} ${GPF.join()}|${GPFR.join()}|${f.join()}`}}
+            </Button>
         </Col>
     </Row>
     <Row>
@@ -71,11 +83,12 @@
   </div>
 </template>
 <script>
-import { calc, getFV } from '@UTIL'
+import { calc, getFV, setStorage, getStorage } from '@UTIL'
 import CalcInput from '@C/CalcInput'
 export default {
     name: 'Home',
     data() {
+        const storage = getStorage('CalcFourWei') || []
         const health = {
             title: '健康檢查',
             align: 'center',
@@ -105,57 +118,68 @@ export default {
         const ininFourWei = {
             title: '四圍',
             align: 'center',
+            className: 'color1',
             children: [
                 {
                     title: '血',
                     key: 'fhp',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 },
                 {
                     title: '攻',
                     key: 'fatk',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 },
                 {
                     title: '防',
                     key: 'fdef',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 },
                 {
                     title: '敏',
                     key: 'fagi',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color1'
                 }
             ]
         }
         const gRate = {
             title: '成長率',
             align: 'center',
+            className: 'color5',
             children: [
                 {
                     title: '血',
                     key: 'vhp',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '攻',
                     key: 'vatk',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '防',
                     key: 'vdef',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '敏',
                     key: 'vagi',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 },
                 {
                     title: '成長',
                     key: 'vSum',
-                    align: 'center'
+                    align: 'center',
+                    className: 'color5'
                 }
             ]
         }
@@ -166,6 +190,7 @@ export default {
             ''
         ]
         return {
+            name: '',
             // GPF: [...arr], //[24, 38, 16, 20]
             GPF: [1, 26, 24, 38, 16, 20], //[24, 38, 16, 20]
             // GPFR: [...arr], //[1, 3, 3, 3]
@@ -173,18 +198,19 @@ export default {
             f: [...arr],
             FV: null,
             columns: [
-                health,
+                // health,
                 ininFourWei,
                 gRate
             ],
             data: [
-            ]
+            ],
+            storage
         }
     },
     computed: {
     },
     methods: {
-        async handleCalc() {
+        handleCalc(isStorage = true) {
             const [a, b, ...gpf] = this.GPF
             this.FV = getFV(gpf).m
             const { fourWei: [fhp, fatk, fdef, fagi], health, gRate } = calc(this)
@@ -196,6 +222,23 @@ export default {
                 ...health,
                 ...gRate
             }]
+            if (isStorage) {
+                const GPFR = [...this.GPFR]
+                const GPF = [...this.GPF]
+                const f = [...this.f]
+                const name = this.name
+                this.storage.unshift({ name, GPFR, GPF, f })
+                this.storage.length > 7 && this.storage.pop()
+                setStorage('CalcFourWei', this.storage)
+            }
+        },
+        handleRecodeCalc(i) {
+            const { GPFR, GPF, f, name } = this.storage[i]
+            this.name = name
+            this.GPF = [...GPF]
+            this.GPFR = [...GPFR]
+            this.f = [...f]
+            this.handleCalc(false)
         }
     },
     components: {
