@@ -2,13 +2,17 @@
     <Layout :style="{minHeight: '100vh', minWidth: '980px'}">
         <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
             <router-link
-                v-for="{path, meta} in $router.options.routes"
                 class="link"
-                :to="path"
-                :exact="path === '/'"
-                :key="path"
+                to="/"
+                :exact="$route.path !== '/'"
             >
-                {{meta.title}}
+                檔次算四圍
+            </router-link>
+            <router-link
+                class="link"
+                to="/CalcGF"
+            >
+                四圍算檔次
             </router-link>
             <div slot="trigger"></div>
         </Sider>
@@ -48,6 +52,8 @@
 <script>
     export default {
         data () {
+            console.log(this.$route);
+            
             return {
                 isCollapsed: false
             }

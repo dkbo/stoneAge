@@ -91,7 +91,7 @@
   </div>
 </template>
 <script>
-import { calc, calcAll, setStorage, getStorage } from '@UTIL'
+import { calc, calcAll, setStorage, getStorage, b64EncodeUnicode, b64DecodeUnicode } from '@UTIL'
 import petData from '@UTIL/petData'
 import CalcInput from '@C/CalcInput'
 export default {
@@ -228,12 +228,7 @@ export default {
                 }
             ]
         }
-        const arr = [
-            '',
-            '',
-            '',
-            ''
-        ]
+        const arr = ['', '', '', '']
         return {
             loading: false,
             pageIndex: 1,
@@ -253,6 +248,17 @@ export default {
             storage
         }
     },
+    mounted() {
+        try {
+            let {GPF, name, FW} = JSON.parse(b64DecodeUnicode(this.$route.query.search))
+            this.GPF = GPF
+            this.name = name
+            this.FW = FW
+            this.handleCalc(false)
+        } catch (err) {
+
+        }
+    },
     computed: {
     },
     methods: {
@@ -266,6 +272,8 @@ export default {
             const GPF = [...this.GPF]
             const FW = [...this.FW]
             const name = this.name
+            const search = b64EncodeUnicode(JSON.stringify({GPF, FW, name}))
+            this.$router.push({ path: 'CalcGF', query: { search }})
             const key = GPF.join()
             let map = this.tempDate[key]
             if (!map) {
