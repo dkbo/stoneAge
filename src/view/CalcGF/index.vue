@@ -71,10 +71,18 @@
     </Row>
     <Row>
         <Col span="24">
+            <Page 
+                :total="data.length" 
+                :page-size="30" 
+                show-total 
+                class="paging" 
+                v-if="data.length"
+                @on-change="handleChangePage"
+            />
             <Table 
                 border 
                 :columns="columns" 
-                :data="data" 
+                :data="pageData" 
                 :loading="loading"
             />
         </Col>
@@ -228,6 +236,7 @@ export default {
         ]
         return {
             loading: false,
+            pageIndex: 1,
             name: '',
             name2: '',
             GPF: ['', '', ...arr],
@@ -239,8 +248,8 @@ export default {
                 fileLevel,
                 gRate
             ],
-            data: [
-            ],
+            data: [],
+            pageData: [],
             storage
         }
     },
@@ -253,7 +262,6 @@ export default {
             this.name = name
         },
         async handleCalc(isStorage = true) {
-            // const a = +new Date()
             this.loading = true
             const GPF = [...this.GPF]
             const FW = [...this.FW]
@@ -270,6 +278,8 @@ export default {
                     this.storage.length > 5 && this.storage.pop()
                     setStorage('CalcGF', this.storage)
                 }
+                this.pageIndex = 1
+                this.pageData = [...this.data.slice((this.pageIndex - 1) * 30, 30)]
                 this.loading = false
             }, 50)
         },
@@ -279,6 +289,11 @@ export default {
             this.GPF = [...GPF]
             this.FW = [...FW]
             this.handleCalc(false)
+        },
+        handleChangePage(v) {
+            this.pageIndex = v
+            this.pageData = [...this.data.slice((v - 1) * 30, 30 * v)]
+
         }
     },
     components: {

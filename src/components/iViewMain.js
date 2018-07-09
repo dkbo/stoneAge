@@ -29,7 +29,7 @@ import Layout from 'iView/src/components/layout'
 // import Message from 'iView/src/components/message'
 // import Modal from 'iView/src/components/modal'
 // import Notice from 'iView/src/components/notice'
-// import Page from 'iView/src/components/page'
+import Page from 'iView/src/components/page'
 // import Poptip from 'iView/src/components/poptip'
 // import Progress from 'iView/src/components/progress'
 // import Radio from 'iView/src/components/radio'
@@ -96,7 +96,7 @@ const components = {
     // Notice,
     Option: Option,
     OptionGroup,
-    // Page,
+    Page,
     Panel: Collapse.Panel,
     // Poptip,
     // Progress,
