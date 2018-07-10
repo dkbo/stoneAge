@@ -60,7 +60,7 @@
             <Table
                 border
                 :columns="columns"
-                :data="pageData"
+                :data="data"
             />
         </Col>
     </Row>
@@ -128,18 +128,12 @@ export default {
     computed: {
     },
     methods: {
-        handleChange(i) {
-            const { name, GPF } = petData[i]
-            this.GPF = [this.GPF[0], ...GPF]
-            this.name = name
-        },
         async handleCalc(isStorage = true) {
             const P = [...this.P]
             const name = this.name
             const search = b64EncodeUnicode(JSON.stringify({P, name}))
             this.$router.push({ path: 'CalcP', query: { search }})
-            const files = calcP(this)
-            this.data = [files]
+            this.data = calcP(this)
             if (isStorage) {
                 this.storage.unshift({ name, P })
                 this.storage.length > 4 && this.storage.pop()
@@ -147,17 +141,11 @@ export default {
             }
         },
         handleRecodeCalc(i) {
-            const { GPF, FW, name } = this.storage[i]
+            const { P, name } = this.storage[i]
             this.name = name
-            this.GPF = [...GPF]
-            this.FW = [...FW]
+            this.P = [...P]
             this.handleCalc(false)
         },
-        handleChangePage(v) {
-            this.pageIndex = v
-            this.pageData = [...this.data.slice((v - 1) * 30, 30 * v)]
-
-        }
     },
     components: {
         CalcInput

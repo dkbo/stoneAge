@@ -317,15 +317,40 @@ export const calcAll = (GPF) =>
         }, 50)
     })
 
-    // vitalP = (1.1 * hpP - attackP - defendP - speedP) / 4.2;
-    // strP = (10 * attackP - defendP - 0.9 * vitalP - 0.45 * speedP) / 9.9;
-    // tghP = (10 * defendP - attackP - 0.9 * vitalP - 0.45 * speedP) / 9.9;
-    // dexP = speedP;
-    // (vitalP,strP,tghP,dexP分別代表體力、腕力、耐力、速度成長率）
-    // (hpP,attackP,defendP,speedP分別代表血攻防敏成長率）
-    // 得到各項內在成長率以後，即可進一步轉換為各項成長檔：
-    // 單項成長檔=100*單項成長率/檔次補正係數-2.5
-
-export const calcP = () => {
-
+//     vitalP = (1.1 * hpP - attackP - defendP - speedP) / 4.2;
+// strP = (10 * attackP - defendP - 0.9 * vitalP - 0.45 * speedP) / 9.9;
+// tghP = (10 * defendP - attackP - 0.9 * vitalP - 0.45 * speedP) / 9.9;
+// dexP = speedP;
+const hpP = ([hp, atk, def, agi]) => (1.1 * hp - atk - def - agi) / 4.2
+const atkP = ([hp, atk, def, agi, hpP]) => (10 * atk - def - 0.9 * hpP - 0.45 * agi) / 9.9
+const defP = ([hp, atk, def, agi, hpP]) => (10 * def - atk - 0.9 * hpP - 0.45 * agi) / 9.9
+const agiP = ([hp, atk, def, agi]) => agi
+// 單項成長檔=100*單項成長率/檔次補正係數-2.5
+const PF = (P, m) => Math.round(100 * P / m - 2.5, 0)
+export const calcP = ({P}) => {
+    const hpPF = hpP(P)
+    const atkPF = atkP([...P, hpPF])
+    const defPF = defP([...P, hpPF])
+    const agiPF = agiP(P)
+    let gpf = []
+    FV.forEach(({m}) => {
+        const hp = PF(hpPF, m) - 2
+        const atk = PF(atkPF, m) - 2
+        const def = PF(defPF, m) - 2
+        const agi = PF(agiPF, m) - 2
+        const calcGpf = [hp, atk, def, agi]
+        console.log(calcGpf, m, getFV(calcGpf).m)
+        if (getFV(calcGpf).m === m) {
+            gpf.push({
+                hp,
+                atk,
+                def,
+                agi
+            })
+            return true
+        } else {
+            return false
+        }
+    })
+    return gpf
 }
