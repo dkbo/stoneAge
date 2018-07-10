@@ -12,7 +12,7 @@
                     </Button>
                 </Col>
                 <Col span="8">
-                    <Select 
+                    <Select
                         v-model="name2"
                         @input="handleChange"
                         filterable
@@ -92,7 +92,7 @@
   </div>
 </template>
 <script>
-import { calc, getFV, setStorage, getStorage, b64EncodeUnicode, b64DecodeUnicode  } from '@UTIL'
+import { calc, getFV, setStorage, getStorage, b64EncodeUnicode, b64DecodeUnicode } from '@UTIL'
 import petData from '@UTIL/petData'
 import CalcInput from '@C/CalcInput'
 export default {

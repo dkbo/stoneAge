@@ -20,6 +20,14 @@ const router = new Router({
                 title: '四圍算檔次'
             },
             component: r => require.ensure([], () => r(require('@V/CalcGF')), 'CalcGF')
+        },
+        {
+            path: '/CalcP',
+            name: 'CalcP',
+            meta: {
+                title: '成長率算成長檔'
+            },
+            component: r => require.ensure([], () => r(require('@V/CalcP')), 'CalcP')
         }
     ]
 })

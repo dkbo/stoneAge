@@ -12,7 +12,7 @@
                     </Button>
                 </Col>
                 <Col span="8">
-                    <Select 
+                    <Select
                         v-model="name2"
                         @input="handleChange"
                         filterable
@@ -71,18 +71,18 @@
     </Row>
     <Row>
         <Col span="24">
-            <Page 
-                :total="data.length" 
-                :page-size="30" 
-                show-total 
-                class="paging" 
+            <Page
+                :total="data.length"
+                :page-size="30"
+                show-total
+                class="paging"
                 v-if="data.length"
                 @on-change="handleChangePage"
             />
-            <Table 
-                border 
-                :columns="columns" 
-                :data="pageData" 
+            <Table
+                border
+                :columns="columns"
+                :data="pageData"
                 :loading="loading"
             />
         </Col>
@@ -91,7 +91,7 @@
   </div>
 </template>
 <script>
-import { calc, calcAll, setStorage, getStorage, b64EncodeUnicode, b64DecodeUnicode } from '@UTIL'
+import { calcAll, setStorage, getStorage, b64EncodeUnicode, b64DecodeUnicode } from '@UTIL'
 import petData from '@UTIL/petData'
 import CalcInput from '@C/CalcInput'
 export default {

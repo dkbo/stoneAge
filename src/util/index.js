@@ -316,3 +316,16 @@ export const calcAll = (GPF) =>
             resolve(map)
         }, 50)
     })
+
+    // vitalP = (1.1 * hpP - attackP - defendP - speedP) / 4.2;
+    // strP = (10 * attackP - defendP - 0.9 * vitalP - 0.45 * speedP) / 9.9;
+    // tghP = (10 * defendP - attackP - 0.9 * vitalP - 0.45 * speedP) / 9.9;
+    // dexP = speedP;
+    // (vitalP,strP,tghP,dexP分別代表體力、腕力、耐力、速度成長率）
+    // (hpP,attackP,defendP,speedP分別代表血攻防敏成長率）
+    // 得到各項內在成長率以後，即可進一步轉換為各項成長檔：
+    // 單項成長檔=100*單項成長率/檔次補正係數-2.5
+
+export const calcP = () => {
+
+}

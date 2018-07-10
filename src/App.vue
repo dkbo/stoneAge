@@ -14,6 +14,12 @@
             >
                 四圍算檔次
             </router-link>
+            <router-link
+                class="link"
+                to="/CalcP"
+            >
+                成長率算成長檔
+            </router-link>
             <div slot="trigger"></div>
         </Sider>
         <Layout>
@@ -53,7 +59,7 @@
     export default {
         data () {
             console.log(this.$route);
-            
+
             return {
                 isCollapsed: false
             }
