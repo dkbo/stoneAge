@@ -58,8 +58,6 @@
 <script>
     export default {
         data () {
-            console.log(this.$route);
-
             return {
                 isCollapsed: false
             }

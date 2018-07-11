@@ -339,13 +339,13 @@ export const calcP = ({P}) => {
         const def = PF(defPF, m) - 2
         const agi = PF(agiPF, m) - 2
         const calcGpf = [hp, atk, def, agi]
-        console.log(calcGpf, m, getFV(calcGpf).m)
         if (getFV(calcGpf).m === m) {
             gpf.push({
                 hp,
                 atk,
                 def,
-                agi
+                agi,
+                m
             })
             return true
         } else {

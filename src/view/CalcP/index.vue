@@ -48,7 +48,7 @@
                 long
                 icon="ios-search"
                 @click="handleRecodeCalc(i)"
-                v-for="({GPF, FW, name}, i) in storage"
+                v-for="({P, name}, i) in storage"
                 :key="i"
             >
                 {{`${name} ${P.join()}`}}
@@ -79,6 +79,12 @@ export default {
             align: 'center',
             className: 'color1',
             children: [
+                {
+                    title: '成長係數',
+                    key: 'm',
+                    align: 'center',
+                    className: 'color1'
+                },
                 {
                     title: '體',
                     key: 'hp',
