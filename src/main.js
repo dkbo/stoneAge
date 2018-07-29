@@ -36,3 +36,17 @@ const vue$ = new Vue({
     store,
     render: createElement => createElement(App)
 })
+
+// const data = [4.7, 4.8, 4.9, 5.0, 5.1, 5.2]
+// const rd = () => data[Math.floor(Math.random() * 6 + 1) - 1]
+// let obj = {}
+// ;[...Array(5000).keys()].forEach((i) => {
+//     let float = 0
+//     let arg = 0
+//     ;[...Array(139).keys()].forEach((i) => {
+//         float += rd()
+//     })
+//     arg = (float / 139).toFixed(2)
+//     obj[arg] = ++obj[arg] || 1
+// })
+// console.log(obj)
