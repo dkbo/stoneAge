@@ -193,7 +193,7 @@ const FV = [
  */
 export const getFV = (gpf) => {
     const val = gpf.reduce((a, b) => a + b)
-    if (val > 100) {
+    if (val >= 100) {
         return FV[0]
     } else if (val >= 95) {
         return FV[1]
