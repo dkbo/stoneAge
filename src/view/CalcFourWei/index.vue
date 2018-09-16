@@ -18,7 +18,9 @@
                         filterable
                         long
                     >
-                        <Option v-for="(pet, i) in petData" :value="i" :key="pet.name" :label="pet.name" />
+                        <OptionGroup v-for="(petCate, i) in petData" :label="petCate.name" :key="petCate.name">
+                            <Option  v-for="(pet, j) in petCate.arr" :value="`${i}.${j}`" :key="pet.name" :label="pet.name" />
+                        </OptionGroup>
                     </Select>
                 </Col>
                 <Col span="8">
@@ -232,8 +234,9 @@ export default {
     computed: {
     },
     methods: {
-        handleChange(i) {
-            const { name, GPF } = petData[i]
+        handleChange(v) {
+            const [i, j] = v.split('.')
+            const { name, GPF } = petData[i].arr[j]
             this.GPF = [this.GPF[0], ...GPF]
             this.name = name
         },
