@@ -128,7 +128,18 @@ export const getSV = ({ GF, V }) => GF + V
  * @param {Number} ISR 單項隨機成長變數
  * @param {Number} FV 隨機檔次補正係數
  */
-export const getAGV = ({ ISI, ISR = 2.5, FV }) => ~~(((ISI + ISR) * FV / 100).toFixed(3) * 100) / 100
+export const getAGV = ({ ISI, ISR = 2.5, FV }) => (((ISI + ISR) * FV / 100).toFixed(3) * 100) / 100
+
+/**
+ * // 平均轉後單項檔=(轉生增幅係數+轉前總成長檔)*(50+4*單項檔)/(150+4*轉前總成長檔)....(無條件去小數點)
+ * @param {Number} ISI 單項成長檔
+ * @param {Number} ISR 單項隨機成長變數
+ * @param {Number} FV 隨機檔次補正係數
+ */
+export const getTP = (av, p, s, sumP) => {
+    // console.log(~~(Math.min(a + sumP, 150) * (s + 4 * p) / (150 + 4 * sumP)))
+    return ~~(Math.min(av + sumP, 150) * (s + 4 * p) / (150 + 4 * sumP))
+}
 
 /**
  * 血 = 體力 * 4 + 腕力 + 耐力 + 速度
@@ -208,6 +219,49 @@ export const getFV = (gpf) => {
     }
 }
 
+// (4.75(當寵物平均總成長檔不低於100；或轉生後的寵物總成長檔不低於130)
+// 4.95(當寵物平均總成長檔在95~99間；或轉生後的寵物總成長檔在100~129間)
+// 5.15(當寵物平均總成長檔在90~94間；或轉生後的寵物總成長檔在95~99間)
+// 5.35(當寵物平均總成長檔或轉生後的寵物總成長檔在在85~89間)
+// 5.55(當寵物平均總成長檔或轉生後的寵物總成長檔在在80~84間)
+// 5.75(當寵物平均總成長檔或轉生後的寵物總成長檔小於80)
+/**
+ * 1轉檔次補正係數
+ */
+export const getTFV = (gpf) => {
+    const val = gpf.reduce((a, b) => a + b)
+    if (val >= 130) {
+        return FV[0]
+    } else if (val >= 100) {
+        return FV[1]
+    } else if (val >= 95) {
+        return FV[2]
+    } else if (val >= 85) {
+        return FV[3]
+    } else if (val >= 80) {
+        return FV[4]
+    } else {
+        return FV[5]
+    }
+}
+
+/**
+ * 增幅係數
+ */
+export const getAV = (gpf) => {
+    const val = gpf.reduce((a, b) => a + b)
+    if (val >= 100) {
+        return 11
+    } else if (val >= 95) {
+        return 12
+    } else if (val >= 85) {
+        return 13
+    } else if (val >= 80) {
+        return 14
+    } else {
+        return 15
+    }
+}
 export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
     const [LV, IA, ...gpf] = GPF
     const base = gpf.map((v, i) => v + GPFR[i] + f[i])
@@ -244,7 +298,50 @@ export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
         }
     }
 }
-
+export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf }) => {
+    const [LV, IA, ...gpf] = GPF
+    const sumP = [...gpf, ...f].reduce((a, b) => a + b)
+    const av = getAV(gpf)
+    const cHp = getTP(av, gpf[0] + f[0], gf[0], sumP)
+    const cAtk = getTP(av, gpf[1] + f[1], gf[1], sumP)
+    const cDef = getTP(av, gpf[2] + f[2], gf[2], sumP)
+    const cAgi = getTP(av, gpf[3] + f[3], gf[3], sumP)
+    const tGpf = [cHp, cAtk, cDef, cAgi]
+    const base = tGpf.map((v, i) => v + GPFR[i] + +tf[i])
+    const TFV = getTFV(tGpf.map((v, i) => v + +tf[i])).m
+    const health = base.map(ISI => getISV({ LV: 1, GC, IA, ISI }))
+    const gRate = tGpf.map((v, i) => getAGV({ISI: v + tf[i], FV: TFV}))
+    const hp = +getHp(health).toFixed(2)
+    const atk = +getAtk(health).toFixed(2)
+    const def = +getDef(health).toFixed(2)
+    const agi = +getAgi(health).toFixed(2)
+    const vhp = +getHp(gRate).toFixed(4)
+    const vatk = +getAtk(gRate).toFixed(4)
+    const vdef = +getDef(gRate).toFixed(4)
+    const vagi = +getAgi(gRate).toFixed(4)
+    const vSum = +(vatk + vdef + vagi).toFixed(4)
+    return {
+        health: {
+            hhp: health[0],
+            hatk: health[1],
+            hdef: health[2],
+            hagi: health[3]
+        },
+        fourWei: [
+            hp,
+            atk,
+            def,
+            agi
+        ],
+        gRate: {
+            vhp,
+            vatk,
+            vdef,
+            vagi,
+            vSum
+        }
+    }
+}
 const combination = (arr) => {
     let results = []
     let result = []

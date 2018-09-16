@@ -28,6 +28,14 @@ const router = new Router({
                 title: '成長率算成長檔'
             },
             component: r => require.ensure([], () => r(require('@V/CalcP')), 'CalcP')
+        },
+        {
+            path: '/CalcTurnFourWei',
+            name: 'CalcTurnFourWei',
+            meta: {
+                title: '四圍算1轉檔次'
+            },
+            component: r => require.ensure([], () => r(require('@V/CalcTurnFourWei')), 'CalcTurnFourWei')
         }
     ]
 })

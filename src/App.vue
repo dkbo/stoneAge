@@ -20,6 +20,12 @@
             >
                 成長率算成長檔
             </router-link>
+            <router-link
+                class="link"
+                to="/CalcTurnFourWei"
+            >
+                檔次算1轉成長
+            </router-link>
             <div slot="trigger"></div>
         </Sider>
         <Layout>
