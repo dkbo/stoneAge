@@ -206,7 +206,7 @@ export default {
             name: '',
             name2: '',
             GPF: ['', '', ...arr], //[24, 38, 16, 20]
-            GPFR: [...arr], //[1, 3, 3, 3]
+            GPFR: [3, 3, 2, 2],
             f: [...arr],
             FV: null,
             columns: [
