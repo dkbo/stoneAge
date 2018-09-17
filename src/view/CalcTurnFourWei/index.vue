@@ -254,6 +254,37 @@ export default {
                 }
             ]
         }
+        const fullFourWei = {
+            title: 'Lv140 四圍',
+            align: 'center',
+            className: 'color5',
+            children: [
+                {
+                    title: '血',
+                    key: 'ffhp',
+                    align: 'center',
+                    className: 'color5'
+                },
+                {
+                    title: '攻',
+                    key: 'ffatk',
+                    align: 'center',
+                    className: 'color5'
+                },
+                {
+                    title: '防',
+                    key: 'ffdef',
+                    align: 'center',
+                    className: 'color5'
+                },
+                {
+                    title: '敏',
+                    key: 'ffagi',
+                    align: 'center',
+                    className: 'color5'
+                }
+            ]
+        }
         const arr = [
             '',
             '',
@@ -274,7 +305,8 @@ export default {
                 // health,
                 ininFourWei,
                 tGpf,
-                gRate
+                gRate,
+                fullFourWei
             ],
             data: [
             ],
@@ -307,7 +339,7 @@ export default {
         handleCalc(isStorage = true) {
             const [a, b, ...gpf] = this.GPF
             this.FV = getFV(gpf).m
-            const { fourWei: [fhp, fatk, fdef, fagi], health, gRate, tGpf: [chp, catk, cdef, cagi] } = calcT(this)
+            const { fourWei: [fhp, fatk, fdef, fagi], health, gRate, tGpf: [chp, catk, cdef, cagi], fullFourWei } = calcT(this)
             const search = b64EncodeUnicode(JSON.stringify({GPF: this.GPF, f: this.f, GPFR: this.GPFR, name: this.name, gf: this.gf, tf: this.tf}))
             this.$router.push({ path: '', query: { search }})
             this.data = [{
@@ -320,7 +352,8 @@ export default {
                 chp, 
                 catk, 
                 cdef, 
-                cagi
+                cagi,
+                ...fullFourWei
             }]
             if (isStorage) {
                 const GPFR = [...this.GPFR]

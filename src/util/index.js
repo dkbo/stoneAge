@@ -131,7 +131,7 @@ export const getSV = ({ GF, V }) => GF + V
 export const getAGV = ({ ISI, ISR = 2.5, FV }) => (((ISI + ISR) * FV / 100).toFixed(3) * 100) / 100
 
 /**
- * // 平均轉後單項檔=(轉生增幅係數+轉前總成長檔)*(50+4*單項檔)/(150+4*轉前總成長檔)....(無條件去小數點)
+ * 平均轉後單項檔=(轉生增幅係數+轉前總成長檔)*(50+4*單項檔)/(150+4*轉前總成長檔)....(無條件去小數點)
  * @param {Number} ISI 單項成長檔
  * @param {Number} ISR 單項隨機成長變數
  * @param {Number} FV 隨機檔次補正係數
@@ -139,8 +139,10 @@ export const getAGV = ({ ISI, ISR = 2.5, FV }) => (((ISI + ISR) * FV / 100).toFi
 export const getTP = (av, p, s, sumP, sumGf) => {
     // console.log(av, p, s, sumP, sumGf)
     // console.log(~~(Math.min(a + sumP, 150) * (s + 4 * p) / (150 + 4 * sumP)))
-    return ~~(Math.min(av + sumP, 150) * (s + 4 * p) / (Math.min(sumGf, 150) + 4 * sumP))
+    return ~~(Math.min(av + sumP, 150) * (s + 4 * p) / (sumGf + 4 * sumP))
 }
+
+export const getFullLevel = (init, g) => ~~(init + g * 139)
 
 /**
  * 血 = 體力 * 4 + 腕力 + 耐力 + 速度
@@ -246,22 +248,13 @@ export const getTFV = (gpf) => {
     }
 }
 
-/**
- * 增幅係數
- */
-export const getAV = (gpf) => {
-    const val = gpf.reduce((a, b) => a + b)
-    if (val >= 100) {
-        return 11
-    } else if (val >= 90) {
-        return 12
-    } else if (val >= 85) {
-        return 13
-    } else if (val >= 80) {
-        return 14
-    } else {
-        return 15
-    }
+const getRank = {
+    '4.75': 0,
+    '4.95': 1,
+    '5.15': 2,
+    '5.35': 3,
+    '5.55': 4,
+    '5.75': 5
 }
 export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
     const [LV, IA, ...gpf] = GPF
@@ -299,11 +292,16 @@ export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
         }
     }
 }
-export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf }) => {
+export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
     const [LV, IA, ...gpf] = GPF
     const sumP = [...gpf, ...f].reduce((a, b) => a + b)
-    const av = getAV(gpf)
-    const sumGf = gf.reduce((a, b) => a + b)
+    const sumGf = Math.min(gf.reduce((a, b) => a + b), 150)
+    // 增幅係數
+    const total = ~~(Math.max(~~Math.pow(sumGf / 100, 5), 0) * 1.3)
+    const rank = getRank[FV]
+    const fix = ((5 - rank) * 1.2) + 5
+    const av = total + ~~((LV - 100) / fix)
+    // 增幅係數
     const cHp = getTP(av, gpf[0] + f[0], gf[0], sumP, sumGf)
     const cAtk = getTP(av, gpf[1] + f[1], gf[1], sumP, sumGf)
     const cDef = getTP(av, gpf[2] + f[2], gf[2], sumP, sumGf)
@@ -322,6 +320,10 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf }) => {
     const vdef = +getDef(gRate).toFixed(4)
     const vagi = +getAgi(gRate).toFixed(4)
     const vSum = +(vatk + vdef + vagi).toFixed(4)
+    const ffhp = getFullLevel(+hp, +vhp)
+    const ffatk = getFullLevel(+atk, +vatk)
+    const ffdef = getFullLevel(+def, +vdef)
+    const ffagi = getFullLevel(+vagi, +vagi)
     return {
         health: {
             hhp: health[0],
@@ -342,6 +344,12 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf }) => {
             vdef,
             vagi,
             vSum
+        },
+        fullFourWei: {
+            ffhp,
+            ffatk,
+            ffdef,
+            ffagi
         }
     }
 }
