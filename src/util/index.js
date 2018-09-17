@@ -335,6 +335,7 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf }) => {
             def,
             agi
         ],
+        tGpf,
         gRate: {
             vhp,
             vatk,

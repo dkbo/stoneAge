@@ -186,6 +186,37 @@ export default {
                 }
             ]
         }
+        const tGpf = {
+            title: '轉後成長檔',
+            align: 'center',
+            className: 'color1',
+            children: [
+                {
+                    title: '體',
+                    key: 'chp',
+                    align: 'center',
+                    className: 'color1'
+                },
+                {
+                    title: '腕',
+                    key: 'catk',
+                    align: 'center',
+                    className: 'color1'
+                },
+                {
+                    title: '耐',
+                    key: 'cdef',
+                    align: 'center',
+                    className: 'color1'
+                },
+                {
+                    title: '速',
+                    key: 'cagi',
+                    align: 'center',
+                    className: 'color1'
+                }
+            ]
+        }
         const gRate = {
             title: '成長率',
             align: 'center',
@@ -242,6 +273,7 @@ export default {
             columns: [
                 // health,
                 ininFourWei,
+                tGpf,
                 gRate
             ],
             data: [
@@ -275,7 +307,7 @@ export default {
         handleCalc(isStorage = true) {
             const [a, b, ...gpf] = this.GPF
             this.FV = getFV(gpf).m
-            const { fourWei: [fhp, fatk, fdef, fagi], health, gRate } = calcT(this)
+            const { fourWei: [fhp, fatk, fdef, fagi], health, gRate, tGpf: [chp, catk, cdef, cagi] } = calcT(this)
             const search = b64EncodeUnicode(JSON.stringify({GPF: this.GPF, f: this.f, GPFR: this.GPFR, name: this.name, gf: this.gf, tf: this.tf}))
             this.$router.push({ path: '', query: { search }})
             this.data = [{
@@ -284,7 +316,11 @@ export default {
                 fdef,
                 fagi,
                 ...health,
-                ...gRate
+                ...gRate,
+                chp, 
+                catk, 
+                cdef, 
+                cagi
             }]
             if (isStorage) {
                 const GPFR = [...this.GPFR]
