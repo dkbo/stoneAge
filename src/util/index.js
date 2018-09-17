@@ -137,7 +137,7 @@ export const getAGV = ({ ISI, ISR = 2.5, FV }) => (((ISI + ISR) * FV / 100).toFi
  * @param {Number} FV 隨機檔次補正係數
  */
 export const getTP = (av, p, s, sumP, sumGf) => {
-    console.log(av, p, s, sumP, sumGf)
+    // console.log(av, p, s, sumP, sumGf)
     // console.log(~~(Math.min(a + sumP, 150) * (s + 4 * p) / (150 + 4 * sumP)))
     return ~~(Math.min(av + sumP, 150) * (s + 4 * p) / (Math.min(sumGf, 150) + 4 * sumP))
 }
