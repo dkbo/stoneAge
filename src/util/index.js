@@ -137,6 +137,7 @@ export const getAGV = ({ ISI, ISR = 2.5, FV }) => (((ISI + ISR) * FV / 100).toFi
  * @param {Number} FV 隨機檔次補正係數
  */
 export const getTP = (av, p, s, sumP, sumGf) => {
+    console.log(av, p, s, sumP, sumGf)
     // console.log(~~(Math.min(a + sumP, 150) * (s + 4 * p) / (150 + 4 * sumP)))
     return ~~(Math.min(av + sumP, 150) * (s + 4 * p) / (Math.min(sumGf, 150) + 4 * sumP))
 }
@@ -252,7 +253,7 @@ export const getAV = (gpf) => {
     const val = gpf.reduce((a, b) => a + b)
     if (val >= 100) {
         return 11
-    } else if (val >= 95) {
+    } else if (val >= 90) {
         return 12
     } else if (val >= 85) {
         return 13
@@ -304,8 +305,8 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf }) => {
     const av = getAV(gpf)
     const sumGf = gf.reduce((a, b) => a + b)
     const cHp = getTP(av, gpf[0] + f[0], gf[0], sumP, sumGf)
-    const cDef = getTP(av, gpf[2] + f[2], gf[2], sumP, sumGf)
     const cAtk = getTP(av, gpf[1] + f[1], gf[1], sumP, sumGf)
+    const cDef = getTP(av, gpf[2] + f[2], gf[2], sumP, sumGf)
     const cAgi = getTP(av, gpf[3] + f[3], gf[3], sumP, sumGf)
     const tGpf = [cHp, cAtk, cDef, cAgi]
     const base = tGpf.map((v, i) => v + GPFR[i] + +tf[i])

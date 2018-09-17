@@ -251,11 +251,13 @@ export default {
     },
     mounted() {
         try {
-            let {GPF, GPFR, name, f} = JSON.parse(b64DecodeUnicode(this.$route.query.search))
+            let {GPF, GPFR, name, f, gf, tf} = JSON.parse(b64DecodeUnicode(this.$route.query.search))
             this.GPF = GPF
             this.GPFR = GPFR
             this.name = name
             this.f = f
+            this.gf = gf
+            this.tf = tf
             this.handleCalc(false)
         } catch (err) {
 
@@ -274,7 +276,7 @@ export default {
             const [a, b, ...gpf] = this.GPF
             this.FV = getFV(gpf).m
             const { fourWei: [fhp, fatk, fdef, fagi], health, gRate } = calcT(this)
-            const search = b64EncodeUnicode(JSON.stringify({GPF: this.GPF, f: this.f, GPFR: this.GPFR, name: this.name}))
+            const search = b64EncodeUnicode(JSON.stringify({GPF: this.GPF, f: this.f, GPFR: this.GPFR, name: this.name, gf: this.gf, tf: this.tf}))
             this.$router.push({ path: '', query: { search }})
             this.data = [{
                 fhp,
