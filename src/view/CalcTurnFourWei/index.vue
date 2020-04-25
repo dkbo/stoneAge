@@ -282,6 +282,12 @@ export default {
                     key: 'ffagi',
                     align: 'center',
                     className: 'color5'
+                },
+                {
+                    title: '戰',
+                    key: 'ffscore',
+                    align: 'center',
+                    className: 'color5'
                 }
             ]
         }
@@ -349,9 +355,9 @@ export default {
                 fagi,
                 ...health,
                 ...gRate,
-                chp, 
-                catk, 
-                cdef, 
+                chp,
+                catk,
+                cdef,
                 cagi,
                 ...fullFourWei
             }]

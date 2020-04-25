@@ -69,7 +69,6 @@ export const setStorage = (key, data, isJson = true) => {
         return
     }
     localStorage[b64EncodeUnicode(key)] = b64EncodeUnicode(data)
-    return
 }
 
 /**
@@ -324,6 +323,7 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
     const ffatk = getFullLevel(+atk, +vatk)
     const ffdef = getFullLevel(+def, +vdef)
     const ffagi = getFullLevel(+vagi, +vagi)
+    const ffscore = ~~(ffhp / 4) + ~~ffatk + ~~ffdef + ~~ffagi
     return {
         health: {
             hhp: health[0],
@@ -349,7 +349,8 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
             ffhp,
             ffatk,
             ffdef,
-            ffagi
+            ffagi,
+            ffscore
         }
     }
 }
