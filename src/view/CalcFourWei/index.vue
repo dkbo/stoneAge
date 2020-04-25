@@ -155,6 +155,12 @@ export default {
                     key: 'fagi',
                     align: 'center',
                     className: 'color1'
+                },
+                {
+                    title: '戰',
+                    key: 'fscore',
+                    align: 'center',
+                    className: 'color1'
                 }
             ]
         }
@@ -243,7 +249,7 @@ export default {
         handleCalc(isStorage = true) {
             const [a, b, ...gpf] = this.GPF
             this.FV = getFV(gpf).m
-            const { fourWei: [fhp, fatk, fdef, fagi], health, gRate } = calc(this)
+            const { fourWei: [fhp, fatk, fdef, fagi, fscore], health, gRate } = calc(this)
             const search = b64EncodeUnicode(JSON.stringify({GPF: this.GPF, f: this.f, GPFR: this.GPFR, name: this.name}))
             this.$router.push({ path: '', query: { search }})
             this.data = [{
@@ -251,6 +257,7 @@ export default {
                 fatk,
                 fdef,
                 fagi,
+                fscore,
                 ...health,
                 ...gRate
             }]

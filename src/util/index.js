@@ -264,6 +264,7 @@ export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
     const atk = +getAtk(health).toFixed(2)
     const def = +getDef(health).toFixed(2)
     const agi = +getAgi(health).toFixed(2)
+    const score = ~~(~~hp / 4) + ~~atk + ~~def + ~~agi
     const vhp = +getHp(gRate).toFixed(4)
     const vatk = +getAtk(gRate).toFixed(4)
     const vdef = +getDef(gRate).toFixed(4)
@@ -280,7 +281,8 @@ export const calc = ({ GC = 4, GPF, GPFR, f, FV }) => {
             hp,
             atk,
             def,
-            agi
+            agi,
+            score
         ],
         gRate: {
             vhp,
@@ -314,6 +316,7 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
     const atk = +getAtk(health).toFixed(2)
     const def = +getDef(health).toFixed(2)
     const agi = +getAgi(health).toFixed(2)
+    const score = ~~(~~hp / 4) + ~~atk + ~~def + ~~agi
     const vhp = +getHp(gRate).toFixed(4)
     const vatk = +getAtk(gRate).toFixed(4)
     const vdef = +getDef(gRate).toFixed(4)
@@ -323,7 +326,7 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
     const ffatk = getFullLevel(+atk, +vatk)
     const ffdef = getFullLevel(+def, +vdef)
     const ffagi = getFullLevel(+vagi, +vagi)
-    const ffscore = ~~(ffhp / 4) + ~~ffatk + ~~ffdef + ~~ffagi
+    const ffscore = ~~(ffhp / 4) + ffatk + ffdef + ffagi
     return {
         health: {
             hhp: health[0],
@@ -335,7 +338,8 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
             hp,
             atk,
             def,
-            agi
+            agi,
+            score
         ],
         tGpf,
         gRate: {
@@ -396,7 +400,7 @@ export const calcAll = (GPF) =>
         setTimeout(() => {
             fileArr.forEach(([fhp, fatk, fdef, fagi]) => {
                 randomFileArr.forEach(([ghp, gatk, gdef, gagi]) => {
-                    const { fourWei: [hp, atk, def, agi], health, gRate } = calc({
+                    const { fourWei: [hp, atk, def, agi, score], health, gRate } = calc({
                         GPF,
                         GPFR: [ghp, gatk, gdef, gagi],
                         f: [fhp, fatk, fdef, fagi],
@@ -407,6 +411,7 @@ export const calcAll = (GPF) =>
                         atk,
                         def,
                         agi,
+                        score,
                         ghp,
                         gatk,
                         gdef,

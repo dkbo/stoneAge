@@ -128,6 +128,12 @@ export default {
                     key: 'agi',
                     align: 'center',
                     className: 'color1'
+                },
+                {
+                    title: '戰',
+                    key: 'score',
+                    align: 'center',
+                    className: 'color1'
                 }
             ]
         }
@@ -304,7 +310,6 @@ export default {
         handleChangePage(v) {
             this.pageIndex = v
             this.pageData = [...this.data.slice((v - 1) * 30, 30 * v)]
-
         }
     },
     components: {
