@@ -223,6 +223,24 @@ const petData = [
                 GPF: [23, 24, 39, 15, 22]
             }
         ]
+    },
+    {
+        name: '烏龜系',
+        arr: [
+            {
+                name: '石龜',
+                GPF: [20, 25, 23, 48, 5]
+            }
+        ]
+    },
+    {
+        name: '穿山甲',
+        arr: [
+            {
+                name: '卡達魯卡斯',
+                GPF: [22, 25, 23, 40, 6]
+            }
+        ]
     }
 ]
 export default petData
