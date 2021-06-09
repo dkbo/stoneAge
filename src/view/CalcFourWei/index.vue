@@ -111,7 +111,7 @@ export default {
     name: 'Home',
     data() {
         const storage = getStorage('CalcFourWei') || []
-        const platform = getStorage('platform') || 0
+        const platform = getStorage('platform') || 1
         const health = {
             title: '健康檢查',
             align: 'center',
