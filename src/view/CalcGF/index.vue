@@ -3,7 +3,7 @@
     <Row>
         <Col span="12">
             <Row>
-                <Col span="8">
+                <Col span="6">
                     <Button
                         type="info"
                         long
@@ -11,19 +11,29 @@
                         基礎素質
                     </Button>
                 </Col>
-                <Col span="8">
+                <Col span="6">
+                    <Select
+                        v-model="platform"
+                        @input="handleChangePlatform"
+                        filterable
+                        long
+                    >
+                        <Option  v-for="({platform}, i) in petData" :label="platform" :key="platform" :value="i" />
+                    </Select>
+                </Col>
+                <Col span="6">
                     <Select
                         v-model="name2"
                         @input="handleChange"
                         filterable
                         long
                     >
-                        <OptionGroup v-for="(petCate, i) in petData" :label="petCate.name" :key="petCate.name">
+                        <OptionGroup v-for="(petCate, i) in getPetData" :label="petCate.name" :key="petCate.name">
                             <Option  v-for="(pet, j) in petCate.arr" :value="`${i}.${j}`" :key="pet.name" :label="pet.name" />
                         </OptionGroup>
                     </Select>
                 </Col>
-                <Col span="8">
+                <Col span="6">
                     <Input v-model="name" placeholder="寵物名稱" />
                 </Col>
             </Row>
@@ -100,6 +110,7 @@ export default {
     name: 'Home',
     data() {
         const storage = getStorage('CalcGF') || []
+        const platform = getStorage('platform') || 0
         const health2 = {
             title: '四圍',
             align: 'center',
@@ -239,6 +250,7 @@ export default {
         const arr = ['', '', '', '']
         return {
             loading: false,
+            platform,
             pageIndex: 1,
             name: '',
             name2: '',
@@ -268,13 +280,19 @@ export default {
         }
     },
     computed: {
+        getPetData() {
+            return this.petData[this.platform].data
+        }
     },
     methods: {
         handleChange(v) {
             const [i, j] = v.split('.')
-            const { name, GPF } = petData[i].arr[j]
+            const { name, GPF } = this.getPetData[i].arr[j]
             this.GPF = [this.GPF[0], ...GPF]
             this.name = name
+        },
+        handleChangePlatform(v) {
+            setStorage('platform', v)
         },
         async handleCalc(isStorage = true) {
             this.loading = true
@@ -282,7 +300,7 @@ export default {
             const FW = [...this.FW]
             const name = this.name
             const search = b64EncodeUnicode(JSON.stringify({GPF, FW, name}))
-            this.$router.push({ path: 'CalcGF', query: { search }})
+            this.$router.push({ path: 'CalcGF', query: { search } })
             const key = GPF.join()
             let map = this.tempDate[key]
             if (!map) {
@@ -317,12 +335,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-.container{
-  /* border: 1px solid #d7dde4; */
-  // background: #f5f7f9;
-  // position: relative;
-  // border-radius: 4px;
-  // overflow: hidden;
-}
-</style>
