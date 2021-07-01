@@ -26,7 +26,7 @@ import Input from 'iView/src/components/input'
 import Layout from 'iView/src/components/layout'
 // import LoadingBar from 'iView/src/components/loading-bar'
 // import Menu from 'iView/src/components/menu'
-// import Message from 'iView/src/components/message'
+import Message from 'iView/src/components/message'
 // import Modal from 'iView/src/components/modal'
 // import Notice from 'iView/src/components/notice'
 import Page from 'iView/src/components/page'
@@ -91,7 +91,7 @@ const components = {
     // Menu,
     // MenuGroup: Menu.Group,
     // MenuItem: Menu.Item,
-    // Message,
+    Message,
     // Modal,
     // Notice,
     Option: Option,
@@ -150,7 +150,7 @@ const install = function(Vue, opts = {}) {
     })
 
     // Vue.prototype.$Loading = LoadingBar
-    // Vue.prototype.$Message = Message
+    Vue.prototype.$Message = Message
     // Vue.prototype.$Modal = Modal
     // Vue.prototype.$Notice = Notice
     // Vue.prototype.$Spin = Spin
@@ -177,4 +177,4 @@ API.lang = (code) => {
     else console.log(`The ${code} language pack is not loaded.`) // eslint-disable-line no-console
 }
 
-export default API   // eslint-disable-line no-undef
+export default API // eslint-disable-line no-undef

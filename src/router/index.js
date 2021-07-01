@@ -36,6 +36,14 @@ const router = new Router({
                 title: '四圍算1轉檔次'
             },
             component: r => require.ensure([], () => r(require('@V/CalcTurnFourWei')), 'CalcTurnFourWei')
+        },
+        {
+            path: '/ThreeBrother',
+            name: 'ThreeBrother',
+            meta: {
+                title: '猜謎三兄弟'
+            },
+            component: r => require.ensure([], () => r(require('@V/ThreeBrother')), 'ThreeBrother')
         }
     ]
 })

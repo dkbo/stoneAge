@@ -26,6 +26,12 @@
             >
                 檔次算1轉成長
             </router-link>
+            <router-link
+                class="link"
+                to="/ThreeBrother"
+            >
+                三兄弟解謎
+            </router-link>
             <div slot="trigger"></div>
         </Sider>
         <Layout>
