@@ -1,13 +1,13 @@
 import ee from './petDataEE'
-import sky from './petDataSky'
+import waterblue from './petDataWaterBlue'
 const petData = [
     {
         platform: '石器EE',
         data: ee
     },
     {
-        platform: '石器天空',
-        data: sky
+        platform: '水藍石器',
+        data: waterblue
     }
 ]
 
