@@ -111,7 +111,7 @@ export default {
     name: 'Home',
     data() {
         const storage = getStorage('CalcFourWei') || []
-        const platform = getStorage('platform') || 1
+        const platform = getStorage('platform') || 0
         const health = {
             title: '健康檢查',
             align: 'center',
@@ -306,9 +306,5 @@ export default {
 <style scoped>
 .container{
   /* border: 1px solid #d7dde4; */
-  // background: #f5f7f9;
-  // position: relative;
-  // border-radius: 4px;
-  // overflow: hidden;
 }
 </style>

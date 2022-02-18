@@ -110,7 +110,7 @@ export default {
     name: 'Home',
     data() {
         const storage = getStorage('CalcGF') || []
-        const platform = getStorage('platform') || 1
+        const platform = getStorage('platform') || 0
         const health2 = {
             title: '四圍',
             align: 'center',
