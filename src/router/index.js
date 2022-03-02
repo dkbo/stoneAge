@@ -22,6 +22,14 @@ const router = new Router({
             component: r => require.ensure([], () => r(require('@V/CalcGF')), 'CalcGF')
         },
         {
+            path: '/CalcPostiveHp',
+            name: 'CalcPostiveHp',
+            meta: {
+                title: '成長檔算毒血'
+            },
+            component: r => require.ensure([], () => r(require('@V/CalcPostiveHp')), 'CalcPostiveHp')
+        },
+        {
             path: '/CalcP',
             name: 'CalcP',
             meta: {

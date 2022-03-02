@@ -468,3 +468,23 @@ export const calcP = ({P}) => {
     })
     return gpf
 }
+// =(((lv-1)*4+b)*(gpfS+G7) / 100 - 20) / 4
+export const calcPostive = (GPF) => {
+    let arr = []
+    const [lv = '', b, ...gpf] = GPF
+    const lvArr = (lv + '').split('.')
+    const gpfS = gpf.reduce((a, b) => a + b) + 10
+    for (let i = 1; i <= 140; i++) {
+        let map = {}
+        ;[...Array(17)].map((k, l) => 8 - l).forEach((n) => {
+            map[`c${n}`] = ~~((((i - 1) * 4 + b) * (gpfS + n) / 100 - 20) / 4).strip()
+        })
+        map.lv = i
+        arr.push(map)
+    }
+    if (lv) {
+        console.log(lvArr)
+        arr = arr.filter(({lv}) => lvArr.find(v => +v === +lv))
+    }
+    return arr
+}

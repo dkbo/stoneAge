@@ -16,6 +16,12 @@
             </router-link>
             <router-link
                 class="link"
+                to="/CalcPostiveHp"
+            >
+                成長檔算毒血
+            </router-link>
+            <router-link
+                class="link"
                 to="/CalcP"
             >
                 成長率算成長檔
