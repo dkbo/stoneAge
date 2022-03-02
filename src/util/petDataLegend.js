@@ -26,16 +26,20 @@ const petData = [
             {
                 name: '貝魯伊卡',
                 GPF: [27, 28, 35, 17, 26]
-            },
+            }
         ]
     },
     {
         name: '雷龍系',
         arr: [
             {
+                name: '水雷',
+                GPF: [27, 35, 26, 36, 14]
+            },
+            {
                 name: '紅雷',
                 GPF: [27, 34, 36, 26, 14]
-            },
+            }
         ]
     },
     {
@@ -56,6 +60,15 @@ const petData = [
             }
         ]
     },
+    {
+        name: '跳狗系',
+        arr: [
+            {
+                name: '拉奇魯哥',
+                GPF: [27, 29, 38, 15, 25]
+            }
+        ]
+    }
 
 ]
 export default petData
