@@ -75,6 +75,15 @@ const petData = [
                 GPF: [16, 28, 29, 32, 21]
             }
         ]
+    },
+    {
+        name: '飛龍系',
+        arr: [
+            {
+                name: '加寶格恩',
+                GPF: [24, 26, 37, 23, 26]
+            }
+        ]
     }
 ]
 export default petData
