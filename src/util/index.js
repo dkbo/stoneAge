@@ -138,7 +138,7 @@ export const getAGV = ({ ISI, ISR = 2.5, FV }) => ((((ISI + ISR) * FV) / 100).to
 export const getTP = (av, p, s, sumP, sumGf) => {
   // console.log(av, p, s, sumP, sumGf)
   // console.log(~~(Math.min(a + sumP, 150) * (s + 4 * p) / (150 + 4 * sumP)))
-  return ~~((Math.min(av + sumP, 150) * (s + 4 * p)) / (sumGf + 4 * sumP))
+  return Math.round((Math.min(av + sumP, 150) * (s + 4 * p)) / (sumGf + 4 * sumP))
 }
 
 export const getFullLevel = (init, g) => ~~(init + g * 139)
@@ -295,10 +295,10 @@ export const calcT = ({ GC = 4, GPF, GPFR, f, gf, tf, FV }) => {
     150
   )
   // 增幅係數
-  const total = ~~(Math.max(~~Math.pow(sumGf / 100, 5), 0) * 1.3)
+  const total = ~~(Math.max(Math.pow(sumGf / 100, 5), 0) * 1.3)
   const rank = getRank[FV]
-  const fix = (5 - rank) * 1.2 + 5
-  const av = total + ~~((LV - 100) / fix)
+  const fix = ~~((5 - rank) * 1.2 + 5)
+  const av = ~~(total + (LV - 100) / fix)
   // 增幅係數
   const cHp = getTP(av, gpf[0] + f[0], gf[0], sumP, sumGf)
   const cAtk = getTP(av, gpf[1] + f[1], gf[1], sumP, sumGf)
